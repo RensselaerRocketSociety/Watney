@@ -1,5 +1,6 @@
 This function handles a Slack slash command and echoes the details back to the user.
 Follow these steps to configure the slash command in Slack:
+
 1. Navigate to https://<your-team-domain>.slack.com/services/new
 2. Search for and select "Slash Commands".
 3. Enter a name for your command and click "Add Slash Command Integration".
@@ -7,6 +8,7 @@ Follow these steps to configure the slash command in Slack:
 5. After you complete this blueprint, enter the provided API endpoint URL in the URL field.
 
 Follow these steps to encrypt your Slack token for use in this function:
+
 1. Create a KMS key - http://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html.
 2. Encrypt the token using the AWS CLI.
     
