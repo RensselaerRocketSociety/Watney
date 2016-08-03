@@ -12,7 +12,7 @@ Follow these steps to encrypt your Slack token for use in this function:
 1. Create a KMS key - http://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html.
 2. Encrypt the token using the AWS CLI.
     
-    $ aws kms encrypt --key-id alias/<KMS key name> --plaintext "<COMMAND_TOKEN>"
+    $ aws kms encrypt --key-id alias/\<KMS key name\> --plaintext "\<COMMAND_TOKEN\>"
 
 3. Copy the base-64 encoded, encrypted key (CiphertextBlob) to the kmsEncyptedToken variable.
 4. Give your function's role permission for the kms:Decrypt action.
