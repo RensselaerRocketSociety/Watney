@@ -1,4 +1,19 @@
-This function handles a Slack slash command and echoes the details back to the user.
+# Watney
+
+The chatbot for the RRS Slack. This is the slash commands function. 
+
+## Deploying the function
+
+1. Run `make_zip.sh`
+2. Go to Lambda in the AWS console
+3. Go to the function
+4. Click "upload"
+5. Choose the generated zip file
+6. ???
+7. Profit
+
+## Making the slash command (if not already done)
+
 Follow these steps to configure the slash command in Slack:
 
 1. Navigate to https://<your-team-domain>.slack.com/services/new
