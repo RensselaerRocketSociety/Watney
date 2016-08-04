@@ -16,7 +16,7 @@ The chatbot for the RRS Slack. This is the slash commands function.
 
 Follow these steps to configure the slash command in Slack:
 
-1. Navigate to https://<your-team-domain>.slack.com/services/new
+1. Navigate to https://\<your-team-domain\>.slack.com/services/new
 2. Search for and select "Slash Commands".
 3. Enter a name for your command and click "Add Slash Command Integration".
 4. Copy the token string from the integration settings and use it in the next section.
