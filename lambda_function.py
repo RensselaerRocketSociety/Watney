@@ -5,6 +5,7 @@ from urlparse import parse_qs
 import logging
 import token
 import re
+import json
 
 import secrets
 
@@ -20,14 +21,14 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('RRS_Privileged_Users')
 privileged_users = [str(user['username']) for user in table.scan()['Items']]
 
-post_channel = '#general'
+post_channels = ['morebottesting', 'bottesting']
 
 ## Usernames must start with a letter or number, but then can contain periods, dashes, 
 ## and underscores. All lowercase.
 username_regex = r'^[a-z0-9][a-z0-9._-]*$'
 
 
-def post(user, command_text):
+def post(user, command_text, channel):
     '''
     Given a message, post that to #general and email it to the email list if 
     the user running the command has those priviliges
@@ -35,14 +36,14 @@ def post(user, command_text):
     Returns an error message if not successful, otherwise a success message
     '''
     if user not in privileged_users:
-        logger.warn('Unprivileged user %s attempted to make announcement %s to the members' % 
-                (user, command_text))
-        return 'You are not a privileged user. This attempt has been logged.'
+        # logger.warn('Unprivileged user %s attempted to make announcement %s to the members' % 
+        #         (user, command_text))
+        return '{"channel" : "%s", "text" : "You are not a privileged user. This attempt has been logged."}' %channel
         ## TODO: log this attempt to DynamoDB, potentially use SNS to notify officers?
 
     ## TODO: Post message in channel, email to mailing list.
-    return ('User %s has posted the following message: \'%s\'. '
-            'It has been posted in general and emailed to the mailing list.') % (user, command_text)
+    return ('{"response_type": "in_channel", "channel" : "%s",  "text" : "User %s has posted the following message : \'%s\'. '
+            'It has been posted in general and emailed to the mailing list."}') % (channel, user, command_text)
 
 
 def add_privileged_user(user, command_text):
@@ -127,16 +128,19 @@ def lambda_handler(event, context):
         '/removeuser': remove_privileged_user
     }
 
+    logger.info(event)
     req_body = event['body']
-    logger.info('request body = %s' % req_body)
+    #logger.info('request body = %s' % req_body)
     params = parse_qs(req_body)
     token = params['token'][0]
     if token not in expected_tokens:
         logger.error('Request token (%s) does not match expected', token)
         raise Exception('Invalid request token')
 
+
     user = params['user_name'][0]
     command = params['command'][0]
+    channel = params['channel_name'][0]
     command_text = params['text'][0]
 
-    return commands[command](user, command_text)
+    return json.loads('%s'%commands[command](user, command_text, post_channels[0]))
