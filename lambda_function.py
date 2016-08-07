@@ -33,6 +33,25 @@ username_regex = r'^[a-z0-9][a-z0-9._-]*$'
 
 post_message_url = 'https://slack.com/api/chat.postMessage'
 
+def extractEmotes(input):
+
+    #Super simple implementation of this. Can we use a nice regex instead of counting ":"'s? Yea.
+    #Do I know how to do that off the top of my head w/o counting? No.
+    #Only thing we need to do is strip out any punctuation that might be attached,
+    #Like in this case: "This is a contrived example :kappa:!". In this algo, its gonna
+    #pull out ":kappa:!" as the emote. But hey, I wrote this in a shorter time than it took me to write this comment.
+    #Ultimately there is gonna have to be a function like "formatter" that takes in the raw slack input and
+    #formats it into the multipart message or prepares it to do that. This can either be this function or another whole function 
+    #That calls this. IDK mannhnnnnnnnnnn
+    workingList = input.split(" ")
+    emojiList = []
+    for word in workingList:
+        if word.count(":") == 2:
+            emojiList.append(word)
+    if len(emojiList) == 0:
+        return None
+    else:
+        return emojiList
 def privileged_users():
     return [str(user['username']) for user in users_table.scan()['Items']]
 
@@ -87,6 +106,7 @@ def post(user, command_text):
     return construct_json(text=('Successfully posted the following message: "%s". '
         'It has been posted in %s and emailed to the mailing list'
         % (command_text, post_channel)))
+
 
 def add_privileged_user(user, command_text):
     '''
