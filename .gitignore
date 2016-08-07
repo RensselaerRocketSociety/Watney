@@ -93,3 +93,6 @@ secrets.py
 
 # Deployment
 *.zip
+
+# Modules
+requests*/
